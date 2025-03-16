@@ -12,14 +12,14 @@ function Sys.min 2
 push argument 0
 push argument 1
 lt
-if-goto LESS
-goto GREATER
+if-goto lessthan
+goto greaterthan
 
-label LESS
+label lessthan
 push argument 0
 goto END
 
-label GREATER
+label greaterthan
 push argument 1
 
 label END
@@ -41,34 +41,17 @@ function Sys.max 2
 push argument 0
 push argument 1
 gt
-if-goto GREATER
-goto LESS
+if-goto greaterthan
+goto lessthan
 
-label GREATER
+label greaterthan
 push argument 0
 goto END
 
-label LESS
+label lessthan
 push argument 1
 
 label END
 return
 
 
-
-//// COMPUTE THE RANGE OF AN ARRAY.
-// This function takes two arguments, representing an array of
-// integers, and returns the range of the array onto the stack.
-// The two arguments are:
-//   ARG0 - memory location where the array starts, and
-//   ARG1 - number of elements in the array.
-// To call this function, you should:
-//   1. push the address of the first array elementonto the stack;
-//   2. push the number of array elements onto the stack; and
-//   2. call this function with `call Sys.range 2`.
-// Before returning, the function pushes the result onto the
-// stack, so that, from the point of view of the callee, the
-// result is at the top of the stack.
-//
-function Sys.range 2
-push ar

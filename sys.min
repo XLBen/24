@@ -1,0 +1,13 @@
+function Sys.min 0
+    push argument 0
+    push argument 1
+    gt               // >
+    // if - then then
+    if-goto THEN       
+    // elif
+    push argument 1
+    goto END
+    label THEN
+    push argument 0
+    label END
+return

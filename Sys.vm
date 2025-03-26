@@ -9,17 +9,15 @@
 // Push to the stack the minimum of two arguments.
 //
 function Sys.min 0
-push argument 0
-push argument 1
-lt
-if-goto ltthanistrue
-push argument 1
-goto lessthanend
-label ltthanistrue
-push argument 0
-label lessthanend
-return
-
+  push argument 0
+  push argument 1
+  lt
+  if-goto ARG0_LESS
+  push argument 1
+  return
+label ARG0_LESS
+  push argument 0
+  return
 
 
 //// COMPUTE THE MAXIMUM OF TWO VALUES
@@ -33,17 +31,15 @@ return
 // Push to the stack the minimum of two arguments.
 //
 function Sys.max 0
-push argument 0
-push argument 1
-gt
-if-goto greaterthanistrue
-push argument 1
-goto greaterthanend
-label greaterthanistrue
-push argument 0
-label greaterthanend
-    return
-
+  push argument 0
+  push argument 1
+  gt
+  if-goto ARG0_MORE
+  push argument 1
+  return
+label ARG0_MORE
+  push argument 0
+  return
 
 
 //// COMPUTE THE RANGE OF AN ARRAY.
@@ -60,61 +56,57 @@ label greaterthanend
 // stack, so that, from the point of view of the callee, the
 // result is at the top of the stack.
 //
-function Sys.range 2
-push argument 0
-pop pointer 0
-
-push this 0
-pop local 0
-push this 0
-pop local 1
-
-push argument 1
-push constant 1
-sub
-pop argument 1
-
-push constant 1
-push pointer 0
-add
-pop pointer 0
-
-label while
-push argument 1
-push constant 0
-
-eq
-if-goto END
-
-push this 0
-push local 0
-call Sys.max 2
-pop local 0
-
-push this 0
-push local 1
-call Sys.min 2
-pop local 1
-
-push constant 1
-push pointer 0
-add
-pop pointer 0
-
-push argument 1
-push constant 1
-sub
-pop argument 1
-
-goto while
-
-label END
-push local 0
-push local 1
-sub
-    return
-
-
+function Sys.range 4
+  push argument 1
+  push constant 1
+  lt
+  if-goto NO_RANGE
+  push argument 1
+  push constant 1
+  eq
+  if-goto NO_RANGE
+  push argument 0
+  pop pointer 0
+  push this 0
+  pop local 0
+  push this 0
+  pop local 1
+  push constant 1
+  pop local 2
+label LOOP
+  push local 2
+  push argument 1
+  lt
+  if-goto ITER
+  goto DONE
+label ITER
+  push argument 0
+  push local 2
+  add
+  pop pointer 0
+  push this 0
+  pop local 3
+  push local 0
+  push local 3
+  call Sys.min 2
+  pop local 0
+  push local 1
+  push local 3
+  call Sys.max 2
+  pop local 1
+  push local 2
+  push constant 1
+  add
+  pop local 2
+  goto LOOP
+label DONE
+  push local 1
+  push local 0
+  sub
+  return
+label NO_RANGE
+  push constant 0
+  return
 
 // The emulator will start executing from here. You can modify
 // the code below while testing and debugging your code, but
